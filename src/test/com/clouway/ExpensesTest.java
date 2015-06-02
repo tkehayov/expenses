@@ -14,11 +14,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.math.BigDecimal;
+import org.junit.rules.ExpectedException;
 
 import static com.google.inject.util.Providers.of;
-import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 /**
@@ -26,10 +24,12 @@ import static org.junit.Assert.*;
  */
 public class ExpensesTest {
   private final LocalServiceTestHelper dataStore = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+  private DatastoreService service;
 
   @Before
   public void setUp() {
     dataStore.setUp();
+    service = DatastoreServiceFactory.getDatastoreService();
   }
 
   @After
@@ -46,11 +46,33 @@ public class ExpensesTest {
   @Rule
   public JUnitRuleMockery context = new JUnitRuleMockery();
 
+  @Rule
+  public ExpectedException exception = ExpectedException.none();
+
   @Test
   public void happyPath() {
-    DatastoreService service = DatastoreServiceFactory.getDatastoreService();
-    BigDecimal funds = new BigDecimal("44444");
+    String funds = "44444";
     final ExpensesJson expensesJson = new ExpensesJson("george", funds.toString());
+    ExpensesPage page = mockExpenses(expensesJson);
+    ExpensesRepository repository = new PersistenceExpensesRepository(of(service));
+
+    page.add(request);
+    Expense one = repository.findOne(expensesJson.getId(), funds);
+
+    assertTrue(one.getFunds().equals(funds));
+  }
+
+  @Test
+  public void addInvalidFunds() {
+    exception.expect(InvalidFundsCastException.class);
+
+
+    final ExpensesJson expensesJson = new ExpensesJson("george", "invalid funds");
+    ExpensesPage page = mockExpenses(expensesJson);
+    page.add(request);
+  }
+
+  private ExpensesPage mockExpenses(final ExpensesJson expensesJson) {
     ExpensesRepository repository = new PersistenceExpensesRepository(of(service));
     ExpensesPage page = new ExpensesPage(of(repository));
 
@@ -60,9 +82,6 @@ public class ExpensesTest {
       oneOf(requestRead).as(Json.class);
       will(returnValue(expensesJson));
     }});
-    page.add(request);
-    Expense one = repository.findOne(expensesJson.getId(), funds);
-
-    assertThat(one.getFunds(), is(funds));
+    return page;
   }
 }

@@ -9,8 +9,6 @@ import com.google.sitebricks.headless.Request;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Post;
 
-import java.math.BigDecimal;
-
 /**
  * @author Tihomir Kehayov <kehayov89@gmail.com>
  */
@@ -27,7 +25,8 @@ public class ExpensesPage {
   @Post
   public Reply<ExpensesJson> add(Request request) {
     ExpensesJson expensesJson = request.read(ExpensesJson.class).as(Json.class);
-    repository.add(expensesJson.getId(), new BigDecimal(expensesJson.getExpenses()));
+
+    repository.add(expensesJson.getId(), expensesJson.getExpenses());
 
     return Reply.with(expensesJson)
             .as(Json.class);
