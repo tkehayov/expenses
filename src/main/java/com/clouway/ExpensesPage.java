@@ -27,7 +27,7 @@ public class ExpensesPage {
   @Post
   public Reply<ExpensesJson> add(Request request) {
     ExpensesJson expensesJson = request.read(ExpensesJson.class).as(Json.class);
-    repository.add(new BigDecimal(expensesJson.getExpenses()));
+    repository.add(expensesJson.getId(), new BigDecimal(expensesJson.getExpenses()));
 
     return Reply.with(expensesJson)
             .as(Json.class);

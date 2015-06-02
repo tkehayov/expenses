@@ -22,23 +22,24 @@ public class PersistenceExpensesRepository implements ExpensesRepository {
   }
 
   @Override
-  public void add(BigDecimal funds) {
-    Entity expensesEntity = new Entity("Expense", "dd");
+  public void add(String id, BigDecimal funds) {
+    Entity expensesEntity = new Entity("Expense", id);
     expensesEntity.setProperty("expense", funds.toString());
 
     datastoreService.put(expensesEntity);
   }
 
   @Override
-  public Expense findOne(BigDecimal bigDecimal) {
-    Key key = KeyFactory.createKey("Expense", "dd");
-    Entity fundEntity = null;
+  public Expense findOne(String id, BigDecimal bigDecimal) {
+    Key key = KeyFactory.createKey("Expense", id);
+    Entity fundEntity;
+    BigDecimal currentFunds = null;
     try {
       fundEntity = datastoreService.get(key);
+      currentFunds = new BigDecimal(fundEntity.getProperty("expense").toString());
     } catch (EntityNotFoundException e) {
       e.printStackTrace();
     }
-    BigDecimal currentFunds = new BigDecimal(fundEntity.getProperty("expense").toString());
 
     return new Expense(currentFunds);
   }

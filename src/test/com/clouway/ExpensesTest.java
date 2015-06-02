@@ -50,7 +50,7 @@ public class ExpensesTest {
   public void happyPath() {
     DatastoreService service = DatastoreServiceFactory.getDatastoreService();
     BigDecimal funds = new BigDecimal("44444");
-    final ExpensesJson json = new ExpensesJson(funds.toString());
+    final ExpensesJson expensesJson = new ExpensesJson("george", funds.toString());
     ExpensesRepository repository = new PersistenceExpensesRepository(of(service));
     ExpensesPage page = new ExpensesPage(of(repository));
 
@@ -58,10 +58,10 @@ public class ExpensesTest {
       oneOf(request).read(ExpensesJson.class);
       will(returnValue(requestRead));
       oneOf(requestRead).as(Json.class);
-      will(returnValue(json));
+      will(returnValue(expensesJson));
     }});
     page.add(request);
-    Expense one = repository.findOne(funds);
+    Expense one = repository.findOne(expensesJson.getId(), funds);
 
     assertThat(one.getFunds(), is(funds));
   }
