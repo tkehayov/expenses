@@ -1,4 +1,4 @@
-package com.clouway;
+package com.clouway.core;
 
 /**
  * @author Tihomir Kehayov <kehayov89@gmail.com>

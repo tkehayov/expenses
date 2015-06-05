@@ -1,5 +1,9 @@
-package com.clouway;
+package com.clouway.adapter.http;
 
+import com.clouway.adapter.rest.ExpensesJson;
+import com.clouway.adapter.jdbc.ExpensesRepository;
+import com.clouway.core.InvalidFundsCastException;
+import com.clouway.adapter.rest.ResponseMessageJson;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.sitebricks.At;
@@ -23,12 +27,15 @@ public class ExpensesPage {
   }
 
   @Post
-  public Reply<ExpensesJson> add(Request request) {
+  public Reply<ResponseMessageJson> add(Request request) {
     ExpensesJson expensesJson = request.read(ExpensesJson.class).as(Json.class);
+    ResponseMessageJson responseMessage = new ResponseMessageJson().withMessage("Success");
+    try {
+      repository.add(expensesJson.getId(), expensesJson.getType(), expensesJson.getExpenses());
+    } catch (InvalidFundsCastException fe) {
+      responseMessage.withMessage("invalid funds");
+    }
 
-    repository.add(expensesJson.getId(), expensesJson.getExpenses());
-
-    return Reply.with(expensesJson)
-            .as(Json.class);
+    return Reply.with(responseMessage).as(Json.class);
   }
 }

@@ -1,18 +1,20 @@
-package com.clouway;
+package com.clouway.adapter.rest;
 
 /**
  * @author Tihomir Kehayov <kehayov89@gmail.com>
  */
-class ExpensesJson {
+public class ExpensesJson {
   private String id;
+  private String type;
   private String expenses;
 
   public ExpensesJson() {
 
   }
 
-  public ExpensesJson(String id, String expenses) {
+  public ExpensesJson(String id, String type, String expenses) {
     this.id = id;
+    this.type = type;
     this.expenses = expenses;
   }
 
@@ -22,5 +24,9 @@ class ExpensesJson {
 
   public String getId() {
     return id;
+  }
+
+  public String getType() {
+    return type;
   }
 }

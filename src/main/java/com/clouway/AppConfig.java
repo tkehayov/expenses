@@ -3,6 +3,9 @@ package com.clouway;
  * @author Tihomir Kehayov <kehayov89@gmail.com>
  */
 
+import com.clouway.adapter.jdbc.ExpensesRepository;
+import com.clouway.adapter.jdbc.PersistenceExpensesRepository;
+import com.clouway.adapter.rest.ExpensesJson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.inject.AbstractModule;
