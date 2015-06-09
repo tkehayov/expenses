@@ -1,6 +1,6 @@
 package com.clouway.adapter.http;
 
-import com.clouway.adapter.jdbc.ExpensesRepository;
+import com.clouway.adapter.db.ExpensesRepository;
 import com.clouway.adapter.rest.Expense;
 import com.clouway.core.InvalidPageNumberException;
 import com.google.inject.Inject;

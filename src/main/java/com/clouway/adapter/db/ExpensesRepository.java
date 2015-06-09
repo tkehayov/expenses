@@ -1,4 +1,4 @@
-package com.clouway.adapter.jdbc;
+package com.clouway.adapter.db;
 
 import com.clouway.adapter.rest.Expense;
 
@@ -10,5 +10,5 @@ import java.util.List;
 public interface ExpensesRepository {
   void add(String type, String funds);
 
-  List<Expense> find(int numberOfItems, Integer pageNumber);
+  List<Expense> find(int pageSize, Integer pageNumber);
 }

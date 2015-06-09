@@ -1,4 +1,4 @@
-package com.clouway.adapter.jdbc;
+package com.clouway.adapter.db;
 
 import com.clouway.adapter.rest.Expense;
 import com.clouway.core.InvalidFundsCastException;
@@ -47,8 +47,8 @@ public class PersistenceExpensesRepository implements ExpensesRepository {
   }
 
   @Override
-  public List<Expense> find(int numberOfItems, Integer pageNumber) {
-    FetchOptions fetchOptions = FetchOptions.Builder.withLimit(numberOfItems);
+  public List<Expense> find(int pageSize, Integer pageNumber) {
+    FetchOptions fetchOptions = FetchOptions.Builder.withLimit(pageSize);
 
     try {
       fetchOptions.offset(pageNumber - 1);

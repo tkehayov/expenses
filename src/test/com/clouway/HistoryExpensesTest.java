@@ -1,7 +1,7 @@
 package com.clouway;
 
-import com.clouway.adapter.jdbc.ExpensesRepository;
-import com.clouway.adapter.jdbc.PersistenceExpensesRepository;
+import com.clouway.adapter.db.ExpensesRepository;
+import com.clouway.adapter.db.PersistenceExpensesRepository;
 import com.clouway.adapter.rest.Expense;
 import com.clouway.core.InvalidPageNumberException;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -25,16 +25,15 @@ import static org.junit.Assert.*;
  * @author Tihomir Kehayov <kehayov89@gmail.com>
  */
 public class HistoryExpensesTest {
+  @Rule
+  public ExpectedException exception = ExpectedException.none();
+
+  @Rule
+  public JUnitRuleMockery context = new JUnitRuleMockery();
+
   private final LocalServiceTestHelper dataStore = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
   private DatastoreService service;
-  @Rule
-  private ExpectedException exception = ExpectedException.none();
-
-  @Rule
-  private JUnitRuleMockery context = new JUnitRuleMockery();
-
   private ExpensesRepository repository;
-
 
   @Before
   public void setUp() throws Exception {
@@ -61,7 +60,7 @@ public class HistoryExpensesTest {
   public void getItemsFromNextPage() {
     addExpenses(new Expense("vacations", "44"), new Expense("girls", "5"), new Expense("beer", "999"));
 
-    List<Expense> one = repository.find(2, 2);
+    List<Expense> one = repository.find(2, 3);
 
     assertThat(one.size(), is(1));
   }

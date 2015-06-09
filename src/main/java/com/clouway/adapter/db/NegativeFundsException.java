@@ -1,4 +1,4 @@
-package com.clouway.adapter.jdbc;
+package com.clouway.adapter.db;
 
 /**
  * @author Tihomir Kehayov <kehayov89@gmail.com>

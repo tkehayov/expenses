@@ -1,7 +1,7 @@
 package com.clouway.adapter.http;
 
-import com.clouway.adapter.jdbc.ExpensesRepository;
-import com.clouway.adapter.jdbc.NegativeFundsException;
+import com.clouway.adapter.db.ExpensesRepository;
+import com.clouway.adapter.db.NegativeFundsException;
 import com.clouway.adapter.rest.Expense;
 import com.clouway.adapter.rest.ResponseMessage;
 import com.clouway.core.InvalidFundsCastException;
@@ -11,7 +11,6 @@ import com.google.sitebricks.At;
 import com.google.sitebricks.client.transport.Json;
 import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Request;
-import com.google.sitebricks.headless.Request.RequestRead;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Post;
 
