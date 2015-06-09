@@ -1,12 +1,14 @@
 package com.clouway.adapter.jdbc;
 
-import com.clouway.core.Expense;
+import com.clouway.adapter.rest.Expense;
+
+import java.util.List;
 
 /**
  * @author Tihomir Kehayov <kehayov89@gmail.com>
  */
 public interface ExpensesRepository {
-  void add(String id, String type, String funds);
+  void add(String type, String funds);
 
-  Expense findOne(String id, String bigDecimal);
+  List<Expense> find(int numberOfItems, Integer pageNumber);
 }

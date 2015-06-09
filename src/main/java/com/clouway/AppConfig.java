@@ -5,7 +5,7 @@ package com.clouway;
 
 import com.clouway.adapter.jdbc.ExpensesRepository;
 import com.clouway.adapter.jdbc.PersistenceExpensesRepository;
-import com.clouway.adapter.rest.ExpensesJson;
+import com.clouway.adapter.rest.Expense;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.inject.AbstractModule;
@@ -29,7 +29,7 @@ public class AppConfig extends GuiceServletContextListener {
     }, new AbstractModule() {
       @Override
       protected void configure() {
-        bind(ExpensesJson.class).annotatedWith(Names.named("expensesJsonAnnotation")).to(ExpensesJson.class);
+        bind(Expense.class).annotatedWith(Names.named("expensesJsonAnnotation")).to(Expense.class);
       }
 
       @Provides

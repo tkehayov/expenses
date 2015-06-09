@@ -3,14 +3,14 @@ package com.clouway.adapter.rest;
 /**
  * @author Tihomir Kehayov <kehayov89@gmail.com>
  */
-public class ResponseMessageJson {
+public class ResponseMessage {
   private String message;
 
-  public ResponseMessageJson() {
+  public ResponseMessage() {
 
   }
 
-  public ResponseMessageJson withMessage(String message) {
+  public ResponseMessage withMessage(String message) {
     this.message = message;
     return this;
   }
