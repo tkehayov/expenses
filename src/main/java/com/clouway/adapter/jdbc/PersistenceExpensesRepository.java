@@ -2,6 +2,7 @@ package com.clouway.adapter.jdbc;
 
 import com.clouway.adapter.rest.Expense;
 import com.clouway.core.InvalidFundsCastException;
+import com.clouway.core.InvalidPageNumberException;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.repackaged.com.google.api.client.util.Lists;
 import com.google.inject.Inject;
@@ -41,7 +42,12 @@ public class PersistenceExpensesRepository implements ExpensesRepository {
   @Override
   public List<Expense> find(int numberOfItems, Integer pageNumber) {
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(numberOfItems);
-    fetchOptions.offset(pageNumber);
+
+    try {
+      fetchOptions.offset(pageNumber);
+    } catch (IllegalArgumentException e) {
+      throw new InvalidPageNumberException();
+    }
 
     Query filteredQuery = new Query("Expense");
     PreparedQuery query = datastoreService.prepare(filteredQuery);

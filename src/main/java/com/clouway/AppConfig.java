@@ -42,6 +42,5 @@ public class AppConfig extends GuiceServletContextListener {
         return new PersistenceExpensesRepository(service);
       }
     });
-
   }
 }

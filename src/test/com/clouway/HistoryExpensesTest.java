@@ -5,6 +5,7 @@ import com.clouway.adapter.jdbc.ExpensesRepository;
 import com.clouway.adapter.jdbc.PersistenceExpensesRepository;
 import com.clouway.adapter.rest.Expense;
 import com.clouway.adapter.rest.PageItems;
+import com.clouway.core.InvalidPageNumberException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
@@ -18,6 +19,7 @@ import com.google.sitebricks.client.transport.Json;
 import com.google.sitebricks.conversion.Converter;
 import com.google.sitebricks.conversion.ConverterRegistry;
 import com.google.sitebricks.conversion.StandardTypeConverter;
+import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Request;
 import com.google.sitebricks.headless.Request.RequestRead;
 import org.jmock.Expectations;
@@ -27,6 +29,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,7 @@ import java.util.List;
 import static com.google.inject.util.Providers.of;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Tihomir Kehayov <kehayov89@gmail.com>
@@ -41,10 +45,11 @@ import static org.junit.Assert.assertThat;
 public class HistoryExpensesTest {
   private final LocalServiceTestHelper dataStore = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
   private DatastoreService service;
+  @Rule
+  public ExpectedException exception = ExpectedException.none();
 
   @Rule
   public JUnitRuleMockery context = new JUnitRuleMockery();
-
 
   ExpensesRepository repository;
 
@@ -69,7 +74,7 @@ public class HistoryExpensesTest {
 
     HistoryExpensesPage historyExpensesPage = new HistoryExpensesPage(of(repository));
 
-    historyExpensesPage.getItems("2", 2);
+    historyExpensesPage.getItems(2, 2);
     List<Expense> one = repository.find(1, 2);
 
     assertThat(one.size(), is(1));
@@ -80,10 +85,18 @@ public class HistoryExpensesTest {
     addExpenses(new Expense("vacations", "44"), new Expense("girls", "5"), new Expense("beer", "999"));
 
     HistoryExpensesPage historyExpensesPage = new HistoryExpensesPage(of(repository));
-    historyExpensesPage.getItems("1", 2);
+    historyExpensesPage.getItems(1, 2);
     List<Expense> one = repository.find(2, 2);
 
     assertThat(one.size(), is(1));
+  }
+
+  @Test
+  public void getItemsFromNegativePage() {
+    exception.expect(InvalidPageNumberException.class);
+    addExpenses(new Expense("dance", "10"), new Expense("girls", "51"), new Expense("vodka", "2"));
+
+    repository.find(2, -2);
   }
 
   private void addExpenses(Expense... expenses) {
