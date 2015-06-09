@@ -4,25 +4,13 @@ import com.clouway.adapter.http.HistoryExpensesPage;
 import com.clouway.adapter.jdbc.ExpensesRepository;
 import com.clouway.adapter.jdbc.PersistenceExpensesRepository;
 import com.clouway.adapter.rest.Expense;
-import com.clouway.adapter.rest.PageItems;
 import com.clouway.core.InvalidPageNumberException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.common.collect.ImmutableSet;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.google.inject.util.Providers;
-import com.google.sitebricks.client.transport.Json;
-import com.google.sitebricks.conversion.Converter;
-import com.google.sitebricks.conversion.ConverterRegistry;
-import com.google.sitebricks.conversion.StandardTypeConverter;
-import com.google.sitebricks.headless.Reply;
-import com.google.sitebricks.headless.Request;
 import com.google.sitebricks.headless.Request.RequestRead;
-import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.After;
@@ -31,13 +19,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.inject.util.Providers.of;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Tihomir Kehayov <kehayov89@gmail.com>

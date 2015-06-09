@@ -3,14 +3,18 @@ package com.clouway.adapter.jdbc;
 import com.clouway.adapter.rest.Expense;
 import com.clouway.core.InvalidFundsCastException;
 import com.clouway.core.InvalidPageNumberException;
-import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.repackaged.com.google.api.client.util.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**

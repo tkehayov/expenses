@@ -2,21 +2,16 @@ package com.clouway.adapter.http;
 
 import com.clouway.adapter.jdbc.ExpensesRepository;
 import com.clouway.adapter.rest.Expense;
-import com.clouway.adapter.rest.PageItems;
 import com.clouway.core.InvalidPageNumberException;
-import com.google.appengine.repackaged.com.google.api.client.util.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.google.sitebricks.At;
 import com.google.sitebricks.client.transport.Json;
 import com.google.sitebricks.headless.Reply;
-import com.google.sitebricks.headless.Request;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Get;
-import com.google.sitebricks.http.Post;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

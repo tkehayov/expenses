@@ -1,8 +1,8 @@
 package com.clouway;
 
+import com.clouway.adapter.http.ExpensesPage;
 import com.clouway.adapter.jdbc.ExpensesRepository;
 import com.clouway.adapter.jdbc.PersistenceExpensesRepository;
-import com.clouway.adapter.http.ExpensesPage;
 import com.clouway.adapter.rest.Expense;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
