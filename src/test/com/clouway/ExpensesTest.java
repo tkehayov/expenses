@@ -23,31 +23,22 @@ import org.junit.rules.ExpectedException;
 import java.util.List;
 
 import static com.google.inject.util.Providers.of;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 /**
  * @author Tihomir Kehayov <kehayov89@gmail.com>
  */
 public class ExpensesTest {
-  private final LocalServiceTestHelper dataStore = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+  private LocalServiceTestHelper dataStore = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
   private DatastoreService service;
-
-  @Before
-  public void setUp() {
-    dataStore.setUp();
-    service = DatastoreServiceFactory.getDatastoreService();
-  }
-
-  @After
-  public void after() {
-    dataStore.tearDown();
-  }
+  private ExpensesRepository repository;
 
   @Mock
-  private Request request;
+  public Request request;
 
   @Mock
-  private RequestRead requestRead;
+  public RequestRead requestRead;
 
   @Rule
   public JUnitRuleMockery context = new JUnitRuleMockery();
@@ -55,33 +46,54 @@ public class ExpensesTest {
   @Rule
   public ExpectedException exception = ExpectedException.none();
 
+  @Before
+  public void setUp() {
+    dataStore.setUp();
+    service = DatastoreServiceFactory.getDatastoreService();
+    repository = new PersistenceExpensesRepository(of(service));
+  }
+
+  @After
+  public void after() {
+    dataStore.tearDown();
+  }
+
   @Test
   public void happyPath() {
     String funds = "44444";
-    final Expense expenses = new Expense("type", funds);
+    Expense expenses = new Expense("types", funds);
     ExpensesPage page = mockExpenses(expenses);
-    ExpensesRepository repository = new PersistenceExpensesRepository(of(service));
 
     page.add(request);
-    List<Expense> one = repository.find(1,1);
 
-    assertTrue(one.get(0).getExpenses().equals(funds));
+    List<Expense> one = repository.find(1, 1);
+
+    assertThat(one.get(0).getExpenses(), is(funds));
   }
 
   @Test
   public void addInvalidFunds() {
     final Expense expenses = new Expense("type", "invalid funds");
     ExpensesPage page = mockExpenses(expenses);
-    ExpensesRepository repository = new PersistenceExpensesRepository(of(service));
 
     page.add(request);
-    List<Expense> one = repository.find(1,1);
+    List<Expense> one = repository.find(1, 1);
+
+    assertTrue(one.isEmpty());
+  }
+
+  @Test
+  public void addNegativeFunds() {
+    final Expense expenses = new Expense("type2", "-23");
+    ExpensesPage page = mockExpenses(expenses);
+
+    page.add(request);
+    List<Expense> one = repository.find(1, 1);
 
     assertTrue(one.isEmpty());
   }
 
   private ExpensesPage mockExpenses(final Expense expenses) {
-    ExpensesRepository repository = new PersistenceExpensesRepository(of(service));
     ExpensesPage page = new ExpensesPage(of(repository));
 
     context.checking(new Expectations() {{

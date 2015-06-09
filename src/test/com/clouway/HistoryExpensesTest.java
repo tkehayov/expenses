@@ -1,6 +1,5 @@
 package com.clouway;
 
-import com.clouway.adapter.http.HistoryExpensesPage;
 import com.clouway.adapter.jdbc.ExpensesRepository;
 import com.clouway.adapter.jdbc.PersistenceExpensesRepository;
 import com.clouway.adapter.rest.Expense;
@@ -10,8 +9,6 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.inject.util.Providers;
-import com.google.sitebricks.headless.Request.RequestRead;
-import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.After;
 import org.junit.Before;
@@ -21,7 +18,6 @@ import org.junit.rules.ExpectedException;
 
 import java.util.List;
 
-import static com.google.inject.util.Providers.of;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -32,15 +28,13 @@ public class HistoryExpensesTest {
   private final LocalServiceTestHelper dataStore = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
   private DatastoreService service;
   @Rule
-  public ExpectedException exception = ExpectedException.none();
+  private ExpectedException exception = ExpectedException.none();
 
   @Rule
-  public JUnitRuleMockery context = new JUnitRuleMockery();
+  private JUnitRuleMockery context = new JUnitRuleMockery();
 
-  ExpensesRepository repository;
+  private ExpensesRepository repository;
 
-  @Mock
-  private RequestRead requestRead;
 
   @Before
   public void setUp() throws Exception {
@@ -58,9 +52,6 @@ public class HistoryExpensesTest {
   public void happyPath() {
     addExpenses(new Expense("women", "51"), new Expense("cars", "1"), new Expense("girls", "4"));
 
-    HistoryExpensesPage historyExpensesPage = new HistoryExpensesPage(of(repository));
-
-    historyExpensesPage.getItems(2, 2);
     List<Expense> one = repository.find(1, 2);
 
     assertThat(one.size(), is(1));
@@ -70,8 +61,6 @@ public class HistoryExpensesTest {
   public void getItemsFromNextPage() {
     addExpenses(new Expense("vacations", "44"), new Expense("girls", "5"), new Expense("beer", "999"));
 
-    HistoryExpensesPage historyExpensesPage = new HistoryExpensesPage(of(repository));
-    historyExpensesPage.getItems(1, 2);
     List<Expense> one = repository.find(2, 2);
 
     assertThat(one.size(), is(1));

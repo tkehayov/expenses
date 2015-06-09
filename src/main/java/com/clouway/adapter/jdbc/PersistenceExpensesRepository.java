@@ -31,7 +31,10 @@ public class PersistenceExpensesRepository implements ExpensesRepository {
   @Override
   public void add(String type, String funds) {
     try {
-      new BigDecimal(funds);
+      if (new BigDecimal(funds).signum() == -1) {
+        throw new NegativeFundsException();
+      }
+
     } catch (NumberFormatException r) {
       throw new InvalidFundsCastException();
     }
@@ -48,7 +51,7 @@ public class PersistenceExpensesRepository implements ExpensesRepository {
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(numberOfItems);
 
     try {
-      fetchOptions.offset(pageNumber);
+      fetchOptions.offset(pageNumber - 1);
     } catch (IllegalArgumentException e) {
       throw new InvalidPageNumberException();
     }
@@ -57,6 +60,7 @@ public class PersistenceExpensesRepository implements ExpensesRepository {
     PreparedQuery query = datastoreService.prepare(filteredQuery);
     QueryResultIterator<Entity> entities = query.asQueryResultIterator(fetchOptions);
     ArrayList<Expense> expenses = Lists.newArrayList();
+
     while (entities.hasNext()) {
       Entity entity = entities.next();
       expenses.add(new Expense(entity.getProperty("type").toString(), entity.getProperty("expense").toString()));
