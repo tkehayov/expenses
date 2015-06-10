@@ -1,4 +1,4 @@
-package com.clouway.adapter.db;
+package com.clouway.core;
 
 import com.clouway.adapter.rest.Expense;
 

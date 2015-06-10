@@ -1,8 +1,10 @@
 package com.clouway.adapter.db;
 
 import com.clouway.adapter.rest.Expense;
+import com.clouway.core.ExpensesRepository;
 import com.clouway.core.InvalidFundsCastException;
 import com.clouway.core.InvalidPageNumberException;
+import com.clouway.core.NegativeFundsException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;

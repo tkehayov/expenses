@@ -1,7 +1,7 @@
 package com.clouway.adapter.http;
 
-import com.clouway.adapter.db.ExpensesRepository;
-import com.clouway.adapter.db.NegativeFundsException;
+import com.clouway.core.ExpensesRepository;
+import com.clouway.core.NegativeFundsException;
 import com.clouway.adapter.rest.Expense;
 import com.clouway.adapter.rest.ResponseMessage;
 import com.clouway.core.InvalidFundsCastException;

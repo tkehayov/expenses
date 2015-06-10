@@ -1,6 +1,6 @@
 package com.clouway;
 
-import com.clouway.adapter.db.ExpensesRepository;
+import com.clouway.core.ExpensesRepository;
 import com.clouway.adapter.db.PersistenceExpensesRepository;
 import com.clouway.adapter.rest.Expense;
 import com.clouway.core.InvalidPageNumberException;

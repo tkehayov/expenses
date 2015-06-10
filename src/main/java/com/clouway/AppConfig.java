@@ -3,7 +3,7 @@ package com.clouway;
  * @author Tihomir Kehayov <kehayov89@gmail.com>
  */
 
-import com.clouway.adapter.db.ExpensesRepository;
+import com.clouway.core.ExpensesRepository;
 import com.clouway.adapter.db.PersistenceExpensesRepository;
 import com.clouway.adapter.rest.Expense;
 import com.google.appengine.api.datastore.DatastoreService;
