@@ -33,10 +33,7 @@ public class PersistenceExpensesRepository implements ExpensesRepository {
   @Override
   public void add(String type, String funds) {
     try {
-      if (new BigDecimal(funds).signum() == -1) {
-        throw new NegativeFundsException();
-      }
-
+      checkForNegativeFunds(funds);
     } catch (NumberFormatException r) {
       throw new InvalidFundsCastException();
     }
@@ -50,6 +47,12 @@ public class PersistenceExpensesRepository implements ExpensesRepository {
 
   @Override
   public List<Expense> find(int pageSize, Integer pageNumber) {
+    QueryResultIterator<Entity> entities = getPageElements(pageSize, pageNumber);
+
+    return getExpenses(entities);
+  }
+
+  private QueryResultIterator<Entity> getPageElements(int pageSize, Integer pageNumber) {
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(pageSize);
 
     try {
@@ -60,8 +63,12 @@ public class PersistenceExpensesRepository implements ExpensesRepository {
 
     Query filteredQuery = new Query("Expense");
     PreparedQuery query = datastoreService.prepare(filteredQuery);
-    QueryResultIterator<Entity> entities = query.asQueryResultIterator(fetchOptions);
-    ArrayList<Expense> expenses = Lists.newArrayList();
+
+    return query.asQueryResultIterator(fetchOptions);
+  }
+
+  private List<Expense> getExpenses(QueryResultIterator<Entity> entities) {
+    List<Expense> expenses = Lists.newArrayList();
 
     while (entities.hasNext()) {
       Entity entity = entities.next();
@@ -69,5 +76,15 @@ public class PersistenceExpensesRepository implements ExpensesRepository {
     }
 
     return expenses;
+  }
+
+  private boolean isNegative(String funds) {
+    return new BigDecimal(funds).signum() == -1;
+  }
+
+  private void checkForNegativeFunds(String funds) {
+    if (isNegative(funds)) {
+      throw new NegativeFundsException();
+    }
   }
 }
